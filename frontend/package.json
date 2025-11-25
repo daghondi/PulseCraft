@@ -1,0 +1,12 @@
+{
+  "name": "pulsecraft-frontend",
+  "version": "1.0.0",
+  "description": "PulseCraft frontend - Customer Personalization Orchestrator UI",
+  "scripts": {
+    "dev": "npx http-server ./public -p 8080 -o",
+    "start": "npm run dev"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

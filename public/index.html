@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PulseCraft Demo</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 2rem; }
+      button { padding: 0.6rem 1rem; margin-right: 0.5rem }
+      #output { margin-top: 1rem; white-space: pre-wrap; border: 1px solid #ddd; padding: 1rem; }
+    </style>
+  </head>
+  <body>
+    <h1>PulseCraft — Demo</h1>
+    <p>A minimal demo harness for the Customer Personalization Orchestrator.</p>
+
+    <label>Customer name: <input id="name" /></label>
+    <div style="margin-top:1rem">
+      <button id="run">Run Demo (live)</button>
+      <button id="replay">Replay Last</button>
+      <button id="list">List Sessions</button>
+    </div>
+
+    <div id="output">No output yet.</div>
+
+    <script>
+      let lastSession = null;
+      document.getElementById('run').onclick = async () => {
+        const name = document.getElementById('name').value;
+        const res = await fetch('/api/demo/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ customerName: name }) });
+        const data = await res.json();
+        lastSession = data.sessionId;
+        document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+      };
+
+      document.getElementById('replay').onclick = async () => {
+        if (!lastSession) { alert('No last session'); return; }
+        const res = await fetch('/api/demo/replay/' + lastSession);
+        const data = await res.json();
+        document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+      };
+
+      document.getElementById('list').onclick = async () => {
+        const res = await fetch('/api/demo/list');
+        const data = await res.json();
+        document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+      };
+    </script>
+  </body>
+</html>
